@@ -1,0 +1,4 @@
+﻿__pycache__
+.env
+.pytest_cache
+results.html
