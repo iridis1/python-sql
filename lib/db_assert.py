@@ -8,13 +8,16 @@ def assert_minimum_records_present(table_name, minimum=1):
     count = cursor.fetchone()["Count"]
     assert count >= minimum
 
+
 def assert_not_null(table_name, field_name):
     assert_no_rows("SELECT %s FROM %s WHERE %s IS NULL OR %s = ''" % (
         field_name, table_name, field_name, field_name))
 
+
 def assert_is_unique(table_name, field_name):
-    assert_no_rows( "SELECT %s FROM %s GROUP BY %s HAVING COUNT(%s) > 1" % (
+    assert_no_rows("SELECT %s FROM %s GROUP BY %s HAVING COUNT(%s) > 1" % (
         field_name, table_name, field_name, field_name))
+
 
 def assert_no_rows(sql):
     print(sql)
@@ -22,4 +25,4 @@ def assert_no_rows(sql):
     rows = cursor.fetchall()
     if len(rows) > 0:
         print(rows)
-    assert len(rows) == 0       
+    assert len(rows) == 0
