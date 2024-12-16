@@ -1,1 +1,1 @@
-pytest -n 2 --html results.html
+pytest -n 2 --html results/report.html --junit-xml results/junit.xml
