@@ -3,8 +3,8 @@ from lib import db_assert
 table = "Shirt"
 
 
-def test_records_present():
-    db_assert.assert_minimum_records_present(table, 1)
+def test_rows_present():
+    db_assert.assert_minimum_rows_present(table, 1)
 
 
 def test_id_unique():

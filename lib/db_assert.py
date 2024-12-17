@@ -1,7 +1,7 @@
 from lib.db_connect import cursor
 
 
-def assert_minimum_records_present(table_name, minimum=1):
+def assert_minimum_rows_present(table_name, minimum=1):
     sql = "SELECT COUNT(*) AS Count FROM %s" % table_name
     print(sql)
     cursor.execute(sql)
@@ -23,6 +23,9 @@ def assert_unique(table_name, field_name):
     assert_no_rows("SELECT %s FROM %s GROUP BY %s HAVING COUNT(%s) > 1" % (
         field_name, table_name, field_name, field_name))
 
+def assert_unique_combination(table_name, field_name_1, field_name_2):
+    assert_no_rows("SELECT %s, %s FROM %s GROUP BY %s, %s HAVING COUNT(*) > 1" % (
+        field_name_1, field_name_2, table_name, field_name_1, field_name_2))
 
 def assert_no_rows(sql):
     print(sql)
