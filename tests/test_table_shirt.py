@@ -1,4 +1,4 @@
-import lib.db_assert as db_assert
+from lib import db_assert
 
 table = "Shirt"
 

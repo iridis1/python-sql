@@ -1,2 +1,2 @@
 set db_environment=tst
-pytest --numprocesses 2 --verbose --html results/report.html
+python -m pytest tests --numprocesses 2 --verbose --html results/report.html

@@ -1,4 +1,4 @@
-from lib.db_assert import db_assert
+from lib import db_assert
 
 table = "Color"
 
