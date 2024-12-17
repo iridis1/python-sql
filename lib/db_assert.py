@@ -14,6 +14,11 @@ def assert_not_null(table_name, field_name):
         field_name, table_name, field_name, field_name))
 
 
+def assert_numeric(table_name, field_name):
+    assert_no_rows("SELECT %s FROM %s WHERE ISNUMERIC(%s) = 0" % (
+        field_name, table_name, field_name))
+
+
 def assert_unique(table_name, field_name):
     assert_no_rows("SELECT %s FROM %s GROUP BY %s HAVING COUNT(%s) > 1" % (
         field_name, table_name, field_name, field_name))

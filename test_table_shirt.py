@@ -12,6 +12,10 @@ def test_id_unique():
     db_assert.assert_unique(table, "Id")
 
 
+def test_size_numeric():
+    db_assert.assert_numeric(table, "Size")
+
+
 def test_size_within_range():
     db_assert.assert_no_rows(
         "SELECT Id, Size FROM Shirt WHERE Size < 48 OR Size > 54")
