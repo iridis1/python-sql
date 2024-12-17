@@ -8,8 +8,8 @@ def test_records_present():
     db_assert.assert_minimum_records_present(table, 1)
 
 
-def test_id_is_unique():
-    db_assert.assert_is_unique(table, "Id")
+def test_id_unique():
+    db_assert.assert_unique(table, "Id")
 
 
 def test_size_within_range():
@@ -17,7 +17,7 @@ def test_size_within_range():
         "SELECT Id, Size FROM Shirt WHERE Size < 48 OR Size > 54")
 
 
-def test_color_reference_is_valid():
+def test_color_reference_valid():
     sql = """SELECT COUNT(*) AS Count FROM Shirt 
                       LEFT JOIN Color ON Shirt.Color_Id = Color.Id 
                       WHERE Shirt.Color_Id IS NULL"""
