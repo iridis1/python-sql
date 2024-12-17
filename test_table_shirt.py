@@ -18,9 +18,6 @@ def test_size_within_range():
 
 
 def test_color_reference_valid():
-    sql = """SELECT COUNT(*) AS Count FROM Shirt 
+    db_assert.assert_no_rows("""SELECT Shirt.Id FROM Shirt 
                       LEFT JOIN Color ON Shirt.Color_Id = Color.Id 
-                      WHERE Shirt.Color_Id IS NULL"""
-    cursor.execute(sql)
-    row = cursor.fetchone()
-    assert row["Count"] == 0
+                      WHERE Shirt.Color_Id IS NULL""")
