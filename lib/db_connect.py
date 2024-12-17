@@ -4,10 +4,10 @@ import pymssql
 
 db_environment = getenv("db_environment")
 
-if db_environment == "":
+if db_environment == "": # Use test environment as default.
     db_environment  = "tst"
 
-load_dotenv("tst.env")
+load_dotenv("%s.env" % db_environment)
 
 conn = pymssql.connect(
     server=getenv("db_server"),
