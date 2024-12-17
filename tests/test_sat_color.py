@@ -19,3 +19,11 @@ def test_name_unique():
 
 def test_assert_satellite_link_valid():
     db_assert_data_vault.assert_satellite_link_valid(entity)
+
+
+def test_satellite_source_valid():
+    db_assert_data_vault.assert_satellite_source_valid(entity, "SAP")
+
+
+def test_satellite_timestamp_valid():
+    db_assert_data_vault.assert_satellite_timestamp_valid(entity)

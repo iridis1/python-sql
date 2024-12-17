@@ -14,14 +14,18 @@ def test_id_unique():
     db_assert.assert_unique(table, "Id")
 
 
-def test_code_not_empty():
+def test_business_key_not_empty():
     db_assert.assert_not_null(table, business_key_field)
 
 
-def test_code_unique():
+def test_business_key_unique():
     db_assert.assert_unique(table, business_key_field)
 
 
 def test_hub_contains_all_business_keys():
     db_assert_data_vault.assert_hub_contains_all_business_keys(
         entity, business_key_field)
+
+
+def test_hub_source_valid():
+    db_assert_data_vault.assert_hub_source_valid(entity, "SAP")
