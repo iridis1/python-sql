@@ -1,5 +1,4 @@
 import lib.db_assert as db_assert
-from lib.db_connect import cursor
 
 table = "Shirt"
 

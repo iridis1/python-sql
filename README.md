@@ -1,6 +1,6 @@
-Execute the following steps to run the database tests:
+Execute the following steps to run the database tests in the test environment.
 
-1 - Create an .env file with the following content:
+1 - Create a tst.env file with the following content:
 
 ```
 db_server=serverName.database.windows.net
@@ -11,5 +11,5 @@ db_user=user
 
 3 - Run `pip install -r -requirements.txt` to install the required packages.
 
-4 - Execute `test.cmd`. This script will run the tests in parallel and generate a test report.
+4 - Execute `test-tst.cmd`. This script will run the tests in parallel and generate a test report.
 
