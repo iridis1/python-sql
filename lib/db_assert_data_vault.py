@@ -17,7 +17,7 @@ def assert_satellite_link_valid(entity):
     db_assert.assert_no_rows(sql)
 
 
-def assert_hub_contains_all_business_keys(entity, business_key_field):
+def assert_hub_data_matches_source_data(entity, business_key_field):
     sql = parse_sql(
         "SELECT {BusKey} FROM {SrcTable} WHERE {BusKey} NOT IN (SELECT {BusKey} FROM {HubTable})", entity, business_key_field)
     db_assert.assert_no_rows(sql)
@@ -71,14 +71,3 @@ def parse_sql(sql, entity, business_key_field="BusinessKeyNotProvided"):
     sql = sql.replace("{Source}", source_field)
     return sql
 
-
-# def assert_hub_matches_source(entity_name):
-#     hub_key = entity_name + foreign_key_postfix
-#     hub_table = hub_prefix + entity_name
-#     sat_table = sat_prefix + entity_name
-
-#     db_assert.assert_no_rows("""SELECT * FROM " +
-#                       LEFT JOIN %s ON %s.%s = %s.%s
-#                       WHERE %s.%s IS NULL OR %s.%s IS NULL""" % (
-#         entity_name, hub_table, entity_name, primary_key, hub_table
-#     ))

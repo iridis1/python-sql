@@ -23,7 +23,7 @@ def test_business_key_unique():
 
 
 def test_hub_contains_all_business_keys():
-    db_assert_data_vault.assert_hub_contains_all_business_keys(
+    db_assert_data_vault.assert_hub_data_matches_source_data(
         entity, business_key_field)
 
 
