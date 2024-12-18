@@ -3,7 +3,7 @@ from lib import db_assert
 hub_prefix = "H_"
 sat_prefix = "S_"
 foreign_key_postfix = "_Id"
-timestamp = "Timestamp"
+timestamp_field = "Timestamp"
 source_field = "Source"
 
 
@@ -28,7 +28,7 @@ def assert_hub_source_valid(entity, source):
 def assert_satellite_link_valid(entity):
     hub_key = entity + foreign_key_postfix
     sat_table = sat_prefix + entity
-    db_assert.assert_unique_combination(sat_table, hub_key, timestamp)
+    db_assert.assert_unique_combination(sat_table, hub_key, timestamp_field)
 
     sql = parse_sql(
         "SELECT Id FROM {HubTable} WHERE Id NOT IN (SELECT {HubFk} FROM {SatTable})", entity)
