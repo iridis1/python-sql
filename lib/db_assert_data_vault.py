@@ -3,45 +3,71 @@ from lib import db_assert
 hub_prefix = "H_"
 sat_prefix = "S_"
 foreign_key_postfix = "_Id"
-primary_key = "_Id"
 timestamp = "Timestamp"
 source_field = "Source"
 
 
-def assert_satellite_link_valid(entity_name):
-    hub_key = entity_name + foreign_key_postfix
-    sat_table = sat_prefix + entity_name
+def assert_satellite_link_valid(entity):
+    hub_key = entity + foreign_key_postfix
+    sat_table = sat_prefix + entity
     db_assert.assert_unique_combination(sat_table, hub_key, timestamp)
     # To be completed
 
 
-def assert_hub_contains_all_business_keys(entity_name, business_key_field):
-    hub_table = hub_prefix + entity_name
-    db_assert.assert_no_rows("SELECT %s FROM %s WHERE %s NOT IN (SELECT %s FROM %s)" % (
-        business_key_field, entity_name, business_key_field, business_key_field, hub_table))
+def assert_hub_contains_all_business_keys(entity, business_key_field):
+    sql = parse_sql(
+        "SELECT {BusKey} FROM {SrcTable} WHERE {BusKey} NOT IN (SELECT {BusKey} FROM {HubTable})", entity, business_key_field)
+    db_assert.assert_no_rows(sql)
 
 
-def assert_satellite_timestamp_valid(entity_name):
-    sat_table = sat_prefix + entity_name
-    hub_table = hub_prefix + entity_name
-    hub_key = entity_name + foreign_key_postfix
-    db_assert.assert_no_rows("SELECT * FROM %s h INNER JOIN %s s ON h.Id = s.%s WHERE s.Timestamp < h.Timestamp" % (
-        hub_table, sat_table, hub_key))
+def assert_satellite_timestamp_valid(entity):
+    sql = parse_sql(
+        "SELECT * FROM {HubTable} h INNER JOIN {SatTable} s ON h.Id = s.{HubFk} WHERE s.Timestamp < h.Timestamp", entity)
+    db_assert.assert_no_rows(sql)
 
 
-def assert_hub_source_valid(entity_name, source):
-    hub_table = hub_prefix + entity_name
-    assert_source_valid(hub_table, source)
+def assert_hub_source_valid(entity, source):
+    sql = parse_sql(
+        "SELECT {Source} FROM {HubTable} WHERE {Source} <> '%s'" % source, entity)
+    db_assert.assert_no_rows(sql)
 
 
-def assert_satellite_source_valid(entity_name, source):
-    sat_table = sat_prefix + entity_name
-    assert_source_valid(sat_table, source)
+def assert_satellite_source_valid(entity, source):
+    sql = parse_sql(
+        "SELECT {Source} FROM {SatTable} WHERE {Source} <> '%s'" % source, entity)
+    db_assert.assert_no_rows(sql)
 
 
-def assert_source_valid(table_name, source):
-    db_assert.assert_no_rows("SELECT %s FROM %s WHERE %s <> '%s'" % (
-        source_field, table_name, source_field, source))
+def assert_satellite_data_matches_source_data(entity, business_key_field, data_fields):
+    sql = parse_sql("""SELECT * FROM {SrcTable} src
+        INNER JOIN(
+            SELECT hub.{BusKey}, %s FROM {HubTable} hub
+            INNER JOIN (
+                SELECT {HubFk}, %s, rownumber
+                FROM (
+                    SELECT
+                        *,
+                        ROW_NUMBER() OVER (PARTITION BY {HubFk} 
+                        ORDER BY Timestamp DESC) AS rownumber
+                        FROM {SatTable}) t
+                WHERE t.rownumber = 1
+            ) sat
+            ON hub.id = sat.{HubFk}
+        ) last_sat
+        ON src.{BusKey}  = last_sat.{BusKey} 
+        WHERE src.Name <> last_sat.Name""", entity, business_key_field) % (data_fields, data_fields)
+    db_assert.assert_no_rows(sql)
+
+
+def parse_sql(sql, entity, business_key_field="BusinessKeyNotProvided"):
+    sql = sql.replace("{SrcTable}", entity)
+    sql = sql.replace("{SatTable}", sat_prefix + entity)
+    sql = sql.replace("{HubTable}", hub_prefix + entity)
+    sql = sql.replace("{HubFk}", entity + foreign_key_postfix)
+    sql = sql.replace("{BusKey}", business_key_field)
+    sql = sql.replace("{Source}", source_field)
+    return sql
+
 
 # def assert_hub_matches_source(entity_name):
 #     hub_key = entity_name + foreign_key_postfix
