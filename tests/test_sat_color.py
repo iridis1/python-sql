@@ -26,8 +26,9 @@ def test_satellite_source_valid():
 
 
 def test_satellite_timestamp_valid():
-    db_assert_data_vault.assert_satellite_timestamp_valid(entity)
+    db_assert_data_vault.assert_hub_and_satellite_timestamps_valid(entity)
 
 
 def test_satellite_data_matches_source_data():
-    db_assert_data_vault.assert_satellite_data_matches_source_data(entity, "Code", "Name")
+    db_assert_data_vault.assert_satellite_data_matches_source_data(
+        entity, "Code", "Name")
