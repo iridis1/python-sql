@@ -26,9 +26,9 @@ def assert_hub_source_valid(entity, source):
 
 
 def assert_satellite_link_valid(entity):
-    hub_key = entity + foreign_key_postfix
+    hub_fk_field = entity + foreign_key_postfix
     sat_table = sat_prefix + entity
-    db_assert.assert_unique_combination(sat_table, hub_key, timestamp_field)
+    db_assert.assert_unique_combination(sat_table, hub_fk_field, timestamp_field)
 
     sql = parse_sql(
         "SELECT Id FROM {HubTable} WHERE Id NOT IN (SELECT {HubFk} FROM {SatTable})", entity)
