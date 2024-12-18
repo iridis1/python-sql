@@ -11,7 +11,10 @@ def assert_satellite_link_valid(entity):
     hub_key = entity + foreign_key_postfix
     sat_table = sat_prefix + entity
     db_assert.assert_unique_combination(sat_table, hub_key, timestamp)
-    # To be completed
+
+    sql = parse_sql(
+        "SELECT Id FROM {HubTable} WHERE Id NOT IN (SELECT {HubFk} FROM {SatTable})", entity)
+    db_assert.assert_no_rows(sql)
 
 
 def assert_hub_contains_all_business_keys(entity, business_key_field):
