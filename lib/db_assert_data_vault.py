@@ -7,25 +7,25 @@ timestamp_field = "Timestamp"
 source_field = "Source"
 
 
-def assert_hub_and_satellite_timestamps_valid(entity):
+def assert_hub_and_satellite_timestamps_valid(entity: str):
     sql = parse_sql(
         "SELECT * FROM {HubTable} h INNER JOIN {SatTable} s ON h.Id = s.{HubFk} WHERE s.Timestamp < h.Timestamp OR s.Timestamp IS NULL OR h.Timestamp IS NULL", entity)
     db_assert.assert_no_rows(sql)
 
 
-def assert_hub_data_matches_source_data(entity, business_key_field):
+def assert_hub_data_matches_source_data(entity: str, business_key_field: str):
     sql = parse_sql(
         "SELECT {BusKey} FROM {SrcTable} WHERE {BusKey} NOT IN (SELECT {BusKey} FROM {HubTable})", entity, business_key_field)
     db_assert.assert_no_rows(sql)
 
 
-def assert_hub_source_valid(entity, source):
+def assert_hub_source_valid(entity: str, source: str):
     sql = parse_sql(
         "SELECT {Source} FROM {HubTable} WHERE {Source} <> '%s'" % source, entity)
     db_assert.assert_no_rows(sql)
 
 
-def assert_satellite_link_valid(entity):
+def assert_satellite_link_valid(entity: str):
     hub_fk_field = entity + foreign_key_postfix
     sat_table = sat_prefix + entity
     db_assert.assert_unique_combination(sat_table, hub_fk_field, timestamp_field)
@@ -35,13 +35,13 @@ def assert_satellite_link_valid(entity):
     db_assert.assert_no_rows(sql)
 
 
-def assert_satellite_source_valid(entity, source):
+def assert_satellite_source_valid(entity: str, source: str):
     sql = parse_sql(
         "SELECT {Source} FROM {SatTable} WHERE {Source} <> '%s'" % source, entity)
     db_assert.assert_no_rows(sql)
 
 
-def assert_satellite_data_matches_source_data(entity, business_key_field, data_fields):
+def assert_satellite_data_matches_source_data(entity: str, business_key_field: str, data_fields: str):
     sql = parse_sql("""SELECT * FROM {SrcTable} src
         INNER JOIN(
             SELECT hub.{BusKey}, %s FROM {HubTable} hub
@@ -62,7 +62,7 @@ def assert_satellite_data_matches_source_data(entity, business_key_field, data_f
     db_assert.assert_no_rows(sql)
 
 
-def parse_sql(sql, entity, business_key_field="BusinessKeyNotProvided"):
+def parse_sql(sql: str, entity: str, business_key_field="BusinessKeyNotProvided"):
     sql = sql.replace("{SrcTable}", entity)
     sql = sql.replace("{SatTable}", sat_prefix + entity)
     sql = sql.replace("{HubTable}", hub_prefix + entity)
