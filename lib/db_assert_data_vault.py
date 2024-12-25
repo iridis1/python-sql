@@ -9,13 +9,15 @@ source_field = "Source"
 
 def assert_hub_and_satellite_timestamps_valid(entity: str):
     sql = parse_sql(
-        "SELECT * FROM {HubTable} h INNER JOIN {SatTable} s ON h.Id = s.{HubFk} WHERE s.Timestamp < h.Timestamp OR s.Timestamp IS NULL OR h.Timestamp IS NULL", entity)
+        "SELECT * FROM {HubTable} h INNER JOIN {SatTable} s ON h.Id = s.{HubFk} WHERE s.Timestamp < h.Timestamp OR s.Timestamp IS NULL OR h.Timestamp IS NULL",
+        entity)
     db_assert.assert_no_rows(sql)
 
 
 def assert_hub_data_matches_source_data(entity: str, business_key_field: str):
     sql = parse_sql(
-        "SELECT {BusKey} FROM {SrcTable} WHERE {BusKey} NOT IN (SELECT {BusKey} FROM {HubTable})", entity, business_key_field)
+        "SELECT {BusKey} FROM {SrcTable} WHERE {BusKey} NOT IN (SELECT {BusKey} FROM {HubTable})", entity,
+        business_key_field)
     db_assert.assert_no_rows(sql)
 
 
