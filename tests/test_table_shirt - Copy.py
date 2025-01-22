@@ -30,6 +30,10 @@ def dubbel_een():
     x = 100
     y = x +250
     z = x + y
+    if x == 100:
+        q = x + a
+    else:
+        q = 0
     db_assert.assert_numeric(table, "Size")
 
 def dubbel_twee():
@@ -37,4 +41,8 @@ def dubbel_twee():
     x = 100
     y = x +250
     z = x + y
-    db_assert.assert_numeric(table, "Size")    
+    if x == 100:
+        q = x + a
+    else:
+        q = 0
+    db_assert.assert_numeric(table, "Size") 
