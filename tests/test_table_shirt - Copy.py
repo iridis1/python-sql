@@ -24,3 +24,17 @@ def test_color_reference_valid():
     db_assert.assert_no_rows("""SELECT Shirt.Id FROM Shirt 
                       LEFT JOIN Color ON Shirt.Color_Id = Color.Id 
                       WHERE Shirt.Color_Id IS NULL""")
+
+def dubbel_een():
+    a = "test"
+    x = 100
+    y = x +250
+    z = x + y
+    db_assert.assert_numeric(table, "Size")
+
+def dubbel_twee():
+    a = "test"
+    x = 100
+    y = x +250
+    z = x + y
+    db_assert.assert_numeric(table, "Size")    
